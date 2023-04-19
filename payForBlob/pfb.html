@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Celestia - Pay For Blob</title>
+    <style>
+      p    {
+        color: whitesmoke;
+
+      }
+      html {
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      body {
+        background-image: url(background.png);
+        padding: 0 30px;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      .item {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 12px;
+      }
+
+      .form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .form input[type="text"] {
+        padding: 8px;
+        border: none;
+        background-color: #f1f1f5;
+        border-radius: 8px;
+      }
+
+      .form textarea {
+        font-family: Arial, Helvetica, sans-serif;
+        padding: 12px;
+        border-radius: 12px;
+        border: none;
+        background-color: #f1f1f5;
+      }
+
+      .submit {
+        width: 200px;
+        padding: 14px;
+        border: none;
+        background-image: linear-gradient(#6ba91c, #6aa91c);
+        color: #fff;
+        border-radius: 8px;
+        font-weight: 600;
+        box-shadow: 2px 4px 5px rgba(107, 169, 28, 0.5);
+        cursor: pointer;
+      }
+
+      h1,
+      h2,
+      h3 {
+        background: linear-gradient(90deg, #00dbde, #fc00ff);
+        text-transform: uppercase;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: #00dbde;
+      }
+
+      h1 {
+        font-weight: 900;
+      }
+
+      h3 {
+        font-weight: 600;
+        text-align: center;
+      }
+
+      label {
+        font-weight: 600;
+      }
+      .zoom {
+        transition: transform .2s; /* Add a transition effect to the transform property */
+        max-width: 500px; /* Set a maximum width for the image */
+        max-height: 300px; /* Set a maximum height for the image */
+      }
+
+      .zoom:hover {
+        transform: scale(1.5); /* Scale the image up by 20% on hover */
+      }
+      footer {
+         background-color: #333; /* Set a dark background color for the footer */
+         color: #fff; /* Set a light text color for the footer text */
+         padding: 20px; /* Add some padding to the footer */
+         text-align: center; /* Center the footer text */
+        }
+
+      footer p {
+        font-size: 14px; /* Set the font size for the footer text */
+        margin: 0; /* Remove any default margins for the paragraph element */
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Celestia Node - Pay For Blob (PFB)</h1>
+    <h2>Tips</h2>
+          <ul>
+            <li><p>This Web is used to submit pay for blob (PFB) transaction and get get namespace share by blockheight</p></li>
+            <li><p>To get namespaceID you can vitsit <a href="https://go.dev/play/p/7ltvaj8lhRl">here</a></p></li>
+            <li><img src="tips.png" alt="Tips" class="zoom"> </li>
+            <li><p>Enter your TXH at <a href="https://testnet.mintscan.io/cosmoshub-testnet">here</a> to see transction detail</p></li>
+            <li><img src="tips2.png" alt="Tips2" class="zoom"> </li>
+          </ul>
+   <h2>Submit PFB</h2>
+    <main style="display: flex; justify-content: center; gap: 25%">
+      <div class="item">
+        <h3>PFB Transaction</h3>
+        <form class="form" id="form1">
+          <div>
+            <div>
+              <label for="input_text">namespaceID</label>
+              <input type="text" name="namespace_id" />
+            </div>
+
+            <br />
+            <div style="display: flex; gap: 72px">
+              <label for="input_text">Data</label>
+              <input type="text" name="data" />
+            </div>
+            <br />
+            <div style="display: flex; gap: 30px">
+              <label for="out">Response</label>
+              <textarea name="response" id="" cols="22" rows="10"></textarea>
+            </div>
+            <br />
+          </div>
+          <input class="submit" type="submit" value="Submit" />
+        </form>
+      </div>
+      <div class="item">
+        <h3>Namespace share by blockheight</h3>
+        <form class="form" id="form2">
+          <div>
+            <div>
+              <label for="input_text">namespaceID</label>
+              <input type="text" name="namespace_id" />
+            </div>
+            <br />
+            <div style="display: flex; gap: 12px">
+              <label for="input_text">Block Height</label>
+              <input type="text" name="block_height" />
+            </div>
+            <br />
+            <div style="display: flex; gap: 30px">
+              <label for="out">Response</label>
+              <textarea name="response" id="" cols="22" rows="10"></textarea>
+            </div>
+            <br />
+          </div>
+          <input class="submit" type="submit" value="Submit" />
+        </form>
+      </div>
+    </main>
+    <script>
+      const submitForm1 = (event) => {
+        event.preventDefault();
+        const form = document.querySelector("#form1");
+        const namespace = form.querySelector("[name=namespace_id]").value;
+        const data = form.querySelector("[name=data]").value;
+        const url = "https://api-celestia.3dexplorer-cosmos.xyz/submit_pfb";
+
+        if (!namespace) {
+            return;
+        }
+
+        const options = {
+          method: "POST",
+          headers: {
+            "Content-Type": "text/plain",
+          },
+          body: JSON.stringify({
+            namespace_id: namespace,
+            data: data,
+            gas_limit: 80000,
+            fee: 2000,
+          }),
+        };
+
+        fetch(url, options)
+          .then((response) => response.json())
+          .then((data) => {
+            form.querySelector('[name=response]').value = JSON.stringify(data, null, 2);
+          })
+          .catch((error) => {
+            console.error(error);
+            form.querySelector('[name=response]').value = "Error: " + error.message;
+          });
+      };
+
+      const submitForm2 = async (event) => {
+        event.preventDefault();
+        const form = document.querySelector("#form2");
+        const namespace = form.querySelector("[name=namespace_id]").value;
+        const blockHeight = form.querySelector("[name=block_height]").value;
+        const url = `https://api-celestia.3dexplorer-cosmos.xyz/namespaced_shares/${namespace}/height/${blockHeight}`;
+
+        if (!namespace) {
+            return;
+        }
+
+        fetch(url)
+          .then((response) => response.json())
+          .then((data) => {
+            form.querySelector('[name=response]').value = JSON.stringify(data, null, 2);
+          })
+          .catch((error) => {
+            console.error(error);
+            form.querySelector('[name=response]').value = "Error: " + error.message;
+          });
+      };
+
+      const form1 = document.querySelector("#form1");
+      form1.addEventListener("submit", submitForm1);
+
+      const form2 = document.querySelector("#form2");
+      form2.addEventListener("submit", submitForm2);
+    </script>
+    <footer>
+      <p>Pay For Blob. Author: lucciolanguyen#8496</p>
+    </footer>
+  </body>
+</html>
